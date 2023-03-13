@@ -19,12 +19,21 @@
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label>Nominal</label>
                         </div>
                         <div class="col-md-8 form-group">
                             <input type="text" class="form-control number-separator" name="nominal" placeholder="Nominal" />
                             @error('nominal')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div> --}}
+                        <div class="col-md-4">
+                            <label>Nominal Per Bulan</label>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <input type="text" class="form-control number-separator" name="per_bulan" placeholder="Nominal Per Bulan" />
+                            @error('per_bulan')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>

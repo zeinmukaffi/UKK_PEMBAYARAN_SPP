@@ -12,9 +12,16 @@
     <link rel="shortcut icon" href="{{ asset('template/assets/images/logo/favicon.png') }}" type="image/png">
 
     <link rel="stylesheet" href="{{ asset('template/assets/css/shared/iconly.css') }}">
-    <link rel="stylesheet" href="{{ asset('template/assets/extensions/simple-datatables/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('template/assets/css/pages/simple-datatables.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('template/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('template/assets/css/pages/datatables.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('template/assets/extensions/simple-datatables/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('template/assets/css/pages/simple-datatables.css') }}"> --}}
+    <style>
+        .vl {
+          border-left: 2px solid #435EBE;
+          /* height: 500px; */
+        }
+    </style>
 </head>
 
 <body>
@@ -71,9 +78,9 @@
                             </a>
                         </li>
 
-                        @if (Auth::user()->level == 'SISWA')
-                        <li class="sidebar-item ">
-                            <a href="#" class='sidebar-link'>
+                        @if (Auth::user()->level == 'Siswa')
+                        <li class="sidebar-item {{ 'history' == request()->path() ? 'active' : '' }}">
+                            <a href="{{ url('history') }}" class='sidebar-link'>
                                 <i class="fas fa-money-bill-wave-alt"></i>
                                 <span>History Pembayaran SPP</span>
                             </a>
@@ -81,24 +88,17 @@
                         @endif
 
                         @if (Auth::user()->level == 'Petugas')
-                        <li class="sidebar-item ">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item {{ 'pembayaran' == request()->path() ? 'active' : '' }}">
+                            <a href="{{ route('pembayaran') }}" class='sidebar-link'>
                                 <i class="bi bi-cash-stack"></i>
                                 <span>Pembayaran SPP</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item ">
-                            <a href="#" class='sidebar-link'>
-                                <i class="fas fa-money-bill-wave-alt"></i>
-                                <span>History Pembayaran SPP</span>
                             </a>
                         </li>
                         @endif
 
                         @if (auth()->user()->level == 'Admin')
-                        <li class="sidebar-item ">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item {{ 'pembayaran' == request()->path() ? 'active' : '' }}">
+                            <a href="{{ route('pembayaran') }}" class='sidebar-link'>
                                 <i class="bi bi-cash-stack"></i>
                                 <span>Pembayaran SPP</span>
                             </a>
@@ -125,10 +125,10 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item  ">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item  {{ 'userManagement' == request()->path() ? 'active' : '' }}">
+                            <a href="{{ url('userManagement') }}" class='sidebar-link'>
                                 <i class="bi bi-people"></i>
-                                <span>Petugas</span>
+                                <span>User Management</span>
                             </a>
                         </li>
                         @endif
@@ -151,25 +151,16 @@
             <div class="page-content">
                 @yield('content')
             </div>
-
-            {{-- <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2023 &copy; schoolifee</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                                href="https://saugi.me">Zein</a></p>
-                    </div>
-                </div>
-            </footer> --}}
         </div>
     </div>
     <script src="{{ asset('template/assets/js/bootstrap.js') }}"></script>
     <script src="{{ asset('template/assets/js/app.js') }}"></script>
+    <script src="{{ asset('template/assets/extensions/jquery/jquery.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <script src="{{ asset('template/assets/js/pages/datatables.js') }}"></script>
 
-    <script src="{{ asset('template/assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
-    <script src="{{ asset('template/assets/js/pages/simple-datatables.js') }}"></script>
+    {{-- <script src="{{ asset('template/assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
+    <script src="{{ asset('template/assets/js/pages/simple-datatables.js') }}"></script> --}}
 
     <!-- Need: Apexcharts -->
     <script src="{{ asset('template/assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
@@ -178,8 +169,26 @@
     {{-- font awesome --}}
     <script src="https://kit.fontawesome.com/a953ebe10c.js" crossorigin="anonymous"></script>
 
-    {{-- <script src="{{ asset('template/assets/extensions/jquery.min.js') }}"></script>
-    <script src="{{ asset('template/assets/extensions/js/number-separator.js') }}"></script> --}}
+    {{-- <script src="{{ asset('template/assets/extensions/jquery.min.js') }}"></script> --}}
+    <script src="{{ asset('template/assets/extensions/js/number-separator.js') }}"></script>
+    <script>
+        easyNumberSeparator({
+          selector: '.number-separator',
+          separator: ',',
+          decimalSeparator: '.',
+          resultInput: '#result_input',
+        });
+
+        // $(document).ready(function() {
+        //     $('#table1').DataTable( {
+        //         dom: 'Bfrtip',
+        //         buttons: [
+        //             'copy', 'csv', 'excel', 'pdf', 'print'
+        //         ]
+        //     } );
+        // } );
+    </script>
+    
 </body>
 
 </html>

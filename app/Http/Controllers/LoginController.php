@@ -29,6 +29,8 @@ class LoginController extends Controller
             'password' => $request->password,
         ];
 
+        // dd($infologin);
+
         if(Auth::attempt($infologin)){
             return redirect('/dashboard');
         }else{

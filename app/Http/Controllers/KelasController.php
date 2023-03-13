@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use PDF;
 
 class KelasController extends Controller
 {
@@ -87,5 +88,14 @@ class KelasController extends Controller
         $kelasId->delete();
 
         return redirect('kelas');
+    }
+
+    public function pdf()
+    {
+        ini_set('max_execution_time', '300');
+        set_time_limit(300);
+        $kelas = Kelas::orderBy('id', 'desc')->get();
+        $pdf = PDF::loadView('pdf.kelas_pdf', ['kelas' => $kelas]);
+        return $pdf->download('laporanKelas.pdf');
     }
 }

@@ -16,9 +16,9 @@
                             <label>Nama Siswa <span style="color:red;">*</span></label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <input type="text" class="form-control" name="nama_siswa"
+                            <input type="text" class="form-control" name="nama"
                                 placeholder="Nama Siswa" />
-                            @error('nama_siswa')
+                            @error('nama')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
@@ -26,7 +26,8 @@
                             <label>NISN <span style="color:red;">*</span></label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <input type="number" class="form-control" maxlength="10" name="nisn" placeholder="NISN" />
+                            <input class="form-control" oninput="this.value=this.value.slice(0,this.maxLength)"
+                            type="number" maxlength="8" name="nisn" placeholder="NISN" />
                             @error('nisn')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
@@ -35,7 +36,8 @@
                             <label>NIS <span style="color:red;">*</span></label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <input type="number" class="form-control" maxlength="18" name="nis" placeholder="NIS" />
+                            <input class="form-control" oninput="this.value=this.value.slice(0,this.maxLength)"
+                            type="number" maxlength="8" name="nis" placeholder="NIS" />
                             @error('nis')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
@@ -49,15 +51,15 @@
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label>PIN (5 Angka) <span style="color:red;">*</span></label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <input type="password" class="form-control" maxlength="5" name="pin" placeholder="PIN (5 Angka)" />
+                            <input type="password" class="form-control" pattern="[0-9]*" inputmode="numeric" maxlength="5" name="pin" placeholder="PIN (5 Angka)" />
                             @error('pin')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
-                        </div>
+                        </div> --}}
                         <div class="col-md-4">
                             <label>Kelas <span style="color:red;">*</span></label>
                         </div>
@@ -74,11 +76,11 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label>SPP (Tahun) <span style="color:red;">*</span></label>
+                            <label>Tahun Masuk <span style="color:red;">*</span></label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <select class="form-select" name="spp_id" id="basicSelect">
-                                <option>Tahun SPP</option>
+                            <select class="form-select spp_id" name="spp_id" id="spp_id">
+                                <option>Tahun Masuk</option>
                                 @foreach ($spp as $item)
                                 <option value="{{ $item->id }}">{{ $item->tahun }}</option>
                                 @endforeach
@@ -87,6 +89,15 @@
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
+                        {{-- <div class="col-md-4">
+                            <label>Tagihan<span style="color:red;">*</span></label>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <input type="text" class="form-control" name="tagihan" readonly id="tagih" />
+                            @error('tagihan')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div> --}}
                         <div class="col-md-4">
                             <label>Alamat <span style="color:red;">*</span></label>
                         </div>
@@ -112,9 +123,23 @@
         </div>
     </div>
 </section>
-{{-- <script>
-    $(".js-example-tags").select2({
-  tags: true
-});
+
+{{-- <script type="text/javascript">
+    $("#spp_id").on('change', function(){
+        var spp_id = $('option:selected', this).val();
+        console.log(spp);
+
+        $.ajax({
+            url: "{{ url('sppNominal') }}",
+            data: {"spp_id": spp_id},
+            type: 'get',
+            success: function (result) {
+                var final = "";
+                console.log(result);
+                console.log(result['data'][0]['nominal']);
+                document.getElementById('tagih').value = result;
+            }
+        });
+    });
 </script> --}}
 @endsection

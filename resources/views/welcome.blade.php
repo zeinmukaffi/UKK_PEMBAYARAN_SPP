@@ -83,7 +83,7 @@
                             <img src="{{ asset('template/assets/images/faces/2.jpg') }}" alt="Face 1">
                         </div>
                         <div class="ms-3 name">
-                            <h5 class="font-bold">{{ implode(" ", array_slice(explode(" ", Auth::user()->nama_petugas), 0, 1)) }}</h5>
+                            <h5 class="font-bold">{{ implode(" ", array_slice(explode(" ", Auth::user()->nama), 0, 2)) }}</h5>
                             <a href="{{ route('logout') }}">
                                 <h6 class="text-muted mb-0">logout</h6>
                             </a>

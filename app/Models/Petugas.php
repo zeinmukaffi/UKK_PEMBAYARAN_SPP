@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Petugas extends Model
 {
-    protected $guarded = [];
-    public function pembayaran()
-    {
-        return $this->hasMany(Pembayaran::class, 'petugas_id');
-    }
+    // protected $guarded = [];
+    // public function pembayaran()
+    // {
+    //     return $this->hasMany(Pembayaran::class, 'petugas_id');
+    // }
 }

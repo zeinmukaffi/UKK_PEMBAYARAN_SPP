@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('tahun');
             $table->integer('nominal');
+            $table->integer('per_bulan');
             $table->timestamps();
         });
     }

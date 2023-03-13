@@ -4,7 +4,8 @@
     <h3>Edit SPP</h3>
     <div class="card">
         <div class="card-body">
-            <form class="form form-horizontal" action="{{ url('spp', $sppId->id) }}" method="POST">
+            @foreach ($sppId as $item)
+            <form class="form form-horizontal" action="{{ url('spp', $item->id) }}" method="POST">
                 @csrf
                 @method('put')
                 <div class="form-body">
@@ -14,18 +15,27 @@
                             <label>Tahun</label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <input type="text" class="form-control" value="{{ $sppId->tahun }}" name="tahun" placeholder="Tahun" />
+                            <input type="text" class="form-control" value="{{ $item->tahun }}" name="tahun" placeholder="Tahun" />
                             @error('tahun')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label>Kompetensi Keahlian</label>
                         </div>
                         <div class="col-md-8 form-group">
-                            <input type="text" class="form-control" value="{{ $sppId->nominal }}" name="nominal"
+                            <input type="text" class="form-control number-separator" value="{{ number_format($item->nominal) }}" name="nominal"
                                 placeholder="Kompetensi Keahlian" />
                             @error('nominal')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div> --}}
+                        <div class="col-md-4">
+                            <label>Nominal Per Bulan</label>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <input type="text" class="form-control number-separator" value="{{ number_format($item->per_bulan) }}" name="per_bulan" placeholder="Nominal Per Bulan" />
+                            @error('per_bulan')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
@@ -40,6 +50,7 @@
                     </div>
                 </div>
             </form>
+            @endforeach
         </div>
     </div>
 </section>

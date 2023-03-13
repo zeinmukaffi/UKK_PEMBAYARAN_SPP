@@ -31,7 +31,7 @@
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label>Kompetensi Keahlian</label>
                         </div>
                         <div class="col-md-8 form-group">
@@ -43,7 +43,7 @@
                             @error('kompetensi_keahlian')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
-                        </div>
+                        </div> --}}
                         <div class="col-sm-12 d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary me-1 mb-1">
                                 Submit

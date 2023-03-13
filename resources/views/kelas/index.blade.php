@@ -6,6 +6,7 @@
         <div class="card-body">
             <div class="d-flex pb-3">
                 <a href="{{ url('kelas/create') }}" class="btn btn-success my-2 mx-2">Add Data [+]</a>
+                <a href="{{ url('kelasPDF') }}" class="btn btn-danger my-2 mx-2">Generate PDF <i class="bi bi-file-earmark-pdf"></i></a>
             </div>
             <table class="table table-striped" id="table1">
                 <thead>

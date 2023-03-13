@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SPP;
 use App\Models\Kelas;
 use App\Models\Siswa;
-use App\Models\SPP;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class SiswaController extends Controller
 {
@@ -16,6 +20,15 @@ class SiswaController extends Controller
     {
         $dataSiswa = Siswa::orderBy('id', 'desc')->get();
         return view('siswa.index', compact('dataSiswa'));
+    }
+
+    public function pdf()
+    {
+        ini_set('max_execution_time', '300');
+        set_time_limit(300);
+        $siswa = Siswa::orderBy('id', 'desc')->get();
+        $pdf = PDF::loadView('pdf.siswa_pdf', ['siswa' => $siswa]);
+        return $pdf->download('laporanSiswa.pdf');
     }
 
     /**
@@ -34,24 +47,37 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama_siswa' => 'required',
+            'nama' => 'required',
             'nisn' => 'required',
+            'nis' => 'required',
+            // 'pin' => 'required',
             'kelas_id' => 'required',
             'spp_id' => 'required',
-            'spp_terbayar' => 'required',
+            // 'tagihan' => 'required',
             'alamat' => 'required',
+            'notelp' => 'required',
         ]);
 
-        $sisa = $request->spp->nominal - $request->spp_terbayar;
-        Siswa::create([
-            'nama_siswa' => $request->nama_siswa,
-            'nisn' => $request->nisn,
-            'kelas_id' => $request->kelas_id,
-            'spp_id' => $request->spp_id,
-            'spp_terbayar' => $request->spp_terbayar,
-            'sisa_spp' => $sisa,
-            'alamat' => $request->alamat,
-        ]);
+        $siswa = new Siswa();
+        $tagihan = SPP::select('spp.nominal')
+        ->where('spp.id', '=', $request->spp_id)
+        ->get();
+
+        foreach ($tagihan as $key) 
+        {
+            $val = $key->nominal;
+            $siswa->tagihan = $val;
+        }
+        
+        $siswa->nama = $request->nama;
+        $siswa->nisn = $request->nisn;
+        // $siswa->pin = $request->pin;
+        $siswa->nis = $request->nis;
+        $siswa->kelas_id = $request->kelas_id;
+        $siswa->spp_id = $request->spp_id;
+        $siswa->alamat = $request->alamat;
+        $siswa->notelp = $request->notelp;
+        $siswa->save();
 
         return redirect('siswa');
     }
@@ -61,15 +87,19 @@ class SiswaController extends Controller
      */
     public function show($id)
     {
-        //
+        $siswaId = Siswa::findorfail($id);
+        return view('siswa.detail', compact('siswaId'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
-        //
+    {   
+        $spp = SPP::all();
+        $kelas = Kelas::all();
+        $siswaId = Siswa::findorfail($id);
+        return view('siswa.edit', compact('spp', 'kelas', 'siswaId'));
     }
 
     /**
@@ -77,7 +107,39 @@ class SiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'nama' => 'required',
+            'nisn' => 'required',
+            'nis' => 'required',
+            // 'pin' => 'required',
+            'kelas_id' => 'required',
+            'spp_id' => 'required',
+            // 'tagihan' => 'required',
+            'alamat' => 'required',
+            'notelp' => 'required',
+        ]);
+
+        $siswaId = Siswa::findorfail($id);
+        $tagihan = SPP::select('spp.nominal')
+        ->where('spp.id', '=', $request->spp_id)
+        ->get();
+        
+        foreach ($tagihan as $key) 
+        {
+            $val = $key->nominal;
+            $siswaId->tagihan = $val;
+        }
+        $siswaId->nama = $request->nama;
+        $siswaId->nisn = $request->nisn;
+        // $siswaId->pin = $request->pin;
+        $siswaId->nis = $request->nis;
+        $siswaId->kelas_id = $request->kelas_id;
+        $siswaId->spp_id = $request->spp_id;
+        $siswaId->alamat = $request->alamat;
+        $siswaId->notelp = $request->notelp;
+        $siswaId->save();
+
+        return redirect('siswa');
     }
 
     /**
@@ -85,6 +147,20 @@ class SiswaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $siswaId = Siswa::findorfail($id);
+        $siswaId->delete();
+        return redirect('siswa');
+    }
+
+    public function history()
+    {
+        // $data = Pembayaran::select('siswas.nama', 'pembayarans.tgl_bayar', 'pembayarans.bulan_dibayar', 'pembayarans.jumlah_bayar', 'pembayarans.sisa_tagihan')
+        // ->join('siswas', 'pembayarans.siswa_id', '=', 'siswas.id')
+        // ->where('pembayarans.siswa_id', '=', Auth::user()->siswa_id)
+        // ->get();
+        
+        $data = DB::select('CALL history(?)', array(Auth::user()->siswa_id));
+        // dd($data);
+        return view('tampilanSiswa.index', compact('data'));
     }
 }

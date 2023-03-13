@@ -17,13 +17,13 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'username' => 'AdminSuranto',
-                'nama_petugas' => 'Suranto',
+                'nama' => 'Suranto',
                 'level' => 'Admin',
                 'password' => bcrypt('admin123'),
             ],
             [
                 'username' => 'PetugasTU',
-                'nama_petugas' => 'Mugianto',
+                'nama' => 'Mugianto',
                 'level' => 'Petugas',
                 'password' => bcrypt('petugas123'),
             ]

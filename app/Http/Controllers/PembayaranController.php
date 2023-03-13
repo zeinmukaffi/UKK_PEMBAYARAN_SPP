@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SPP;
+use App\Models\Siswa;
+use App\Models\Petugas;
+use PDF;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PembayaranController extends Controller
 {
@@ -14,7 +19,9 @@ class PembayaranController extends Controller
      */
     public function index()
     {
-        //
+        $dataBayar = Pembayaran::orderby('id', 'desc')->get();
+        $dataSiswa = Siswa::orderBy('id', 'desc')->get();
+        return view('pembayaran.index', compact('dataBayar', 'dataSiswa'));
     }
 
     /**
@@ -22,9 +29,11 @@ class PembayaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $bayarId = Siswa::findorfail($id);
+        // dd($bayarId);
+        return view('pembayaran.entry', compact('bayarId'));
     }
 
     /**
@@ -33,9 +42,32 @@ class PembayaranController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function pay(Request $request)
     {
-        //
+        $this->validate($request, [
+            'bulan_dibayar' => 'required',
+            'tgl_bayar' => 'required',
+            'jumlah_bayar' => 'required',
+        ]);
+
+        $byr =  new Pembayaran();
+        $tagihan = Siswa::select('tagihan')
+        ->where('siswas.id', '=', $request->siswa_id)
+        ->get();
+
+        foreach ($tagihan as $val) {
+            $sisa = $val->tagihan;
+            $byr->sisa_tagihan = $sisa - str_replace(',', '', $request->jumlah_bayar);
+        }
+        
+        $byr->petugas_id = $request->petugas_id;
+        $byr->siswa_id = $request->siswa_id;
+        $byr->bulan_dibayar = $request->bulan_dibayar;
+        $byr->tgl_bayar = $request->tgl_bayar;
+        $byr->jumlah_bayar = str_replace(',', '', $request->jumlah_bayar);
+        $byr->save();
+
+        return redirect('/pembayaran');
     }
 
     /**
@@ -44,9 +76,23 @@ class PembayaranController extends Controller
      * @param  \App\Models\Pembayaran  $pembayaran
      * @return \Illuminate\Http\Response
      */
-    public function show(Pembayaran $pembayaran)
+    // public function show($id)
+    // {
+    //     $bayarId = Pembayaran::findorfail($id);
+    //     $data = DB::select('CALL history(?)', array($bayarId->siswa_id));
+    //     return view('pembayaran.invoice', compact('bayarId', 'data'));
+    // }
+
+    public function show($id)
     {
-        //
+        ini_set('max_execution_time', '300');
+        set_time_limit(300);
+
+        $bayarId = Pembayaran::findorfail($id);
+        $data = DB::select('CALL history(?)', array($bayarId->siswa_id));
+        $pdf = PDF::loadView('pembayaran.invoice', compact('bayarId','data'))->setOptions(['defaultFont' => 'sans-serif'])->setPaper('a4', 'landscape');
+        return $pdf->download('Invoices'.$bayarId->bulan_dibayar.'.pdf');
+        // return $pdf->stream();
     }
 
     /**

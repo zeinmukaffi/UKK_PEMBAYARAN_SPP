@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\SPP;
+use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SPPController extends Controller
 {
@@ -13,7 +15,7 @@ class SPPController extends Controller
      */
     public function index()
     {
-        $dataSPP = SPP::orderBy('id', 'desc')->get();
+        $dataSPP = DB::select('CALL callSpp()');
         return view('spp.index', compact('dataSPP'));
     }
 
@@ -32,13 +34,17 @@ class SPPController extends Controller
     {
         $this->validate($request, [
             'tahun' => 'required',
-            'nominal' => 'required',
+            // 'nominal' => 'required',
+            'per_bulan' => 'required',
         ]);
 
-        SPP::create([
-            'tahun' => $request->tahun,
-            'nominal' => $request->nominal,
-        ]);
+        $spp = new SPP();
+        $total = str_replace(',', '', $request->per_bulan);
+        // dd($total);
+        $spp->tahun = $request->tahun;
+        $spp->nominal = $total * 36;
+        $spp->per_bulan = str_replace(',', '', $request->per_bulan);
+        $spp->save();
 
         return redirect('spp');
     }
@@ -56,7 +62,8 @@ class SPPController extends Controller
      */
     public function edit($id)
     {
-        $sppId = SPP::findorfail($id);
+        $sppId = DB::select('CALL callSppEdit(?)', array($id));
+        // dd($sppId);
         return view('spp.edit', compact('sppId'));
     }
 
@@ -67,14 +74,17 @@ class SPPController extends Controller
     {
         $this->validate($request, [
             'tahun' => 'required',
-            'nominal' => 'required',
+            // 'nominal' => 'required',
+            'per_bulan' => 'required',
         ]);
 
-        $sppId = SPP::findorfail($id);
-        $sppId->update([
-            'tahun' => $request->tahun,
-            'nominal' => $request->nominal,
-        ]);
+        $spp = SPP::findorfail($id);
+        $total = str_replace(',', '', $request->per_bulan);
+        // dd($total);
+        $spp->tahun = $request->tahun;
+        $spp->nominal = $total * 36;
+        $spp->per_bulan = str_replace(',', '', $request->per_bulan);
+        $spp->save();
 
         return redirect('spp');
     }
@@ -84,9 +94,25 @@ class SPPController extends Controller
      */
     public function destroy($id)
     {
-        $sppId = SPP::findorfail($id);
-        $sppId->delete();
+        // $sppId = SPP::findorfail($id);
+        // $sppId->delete();
+        $sppId = DB::select('CALL callSppDelete(?)', array($id));
 
         return redirect('spp');
     }
+
+    public function pdf()
+    {
+        ini_set('max_execution_time', '300');
+        set_time_limit(300);
+        $spp = DB::select('CALL callSpp()');
+        $pdf = PDF::loadView('pdf.spp_pdf', ['spp' => $spp]);
+        return $pdf->download('laporanSPP.pdf');
+    }
+
+    // public function s()
+    // {
+    //     $spp = DB::select('CALL callSpp()');
+    //     return view('pdf.spp_pdf', compact('spp'));
+    // }
 }

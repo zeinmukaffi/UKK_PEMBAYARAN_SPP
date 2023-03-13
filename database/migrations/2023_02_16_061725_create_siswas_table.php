@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('spp_id')->references('id')->on('spp')->onDelete('cascade');
             $table->text('alamat');
             $table->string('notelp');
+            $table->string('tagihan');
             $table->timestamps();
         });
     }
