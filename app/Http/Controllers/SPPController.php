@@ -15,7 +15,8 @@ class SPPController extends Controller
      */
     public function index()
     {
-        $dataSPP = DB::select('CALL callSpp()');
+        // $dataSPP = DB::select('CALL callSpp()');
+        $dataSPP = SPP::all();
         return view('spp.index', compact('dataSPP'));
     }
 

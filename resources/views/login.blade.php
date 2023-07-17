@@ -19,7 +19,6 @@
             <div class="col-lg-5 col-12">
                 <div id="auth-left" style="margin-top: 5rem">
                     <h1 class="auth-title mb-0">Log in.</h1>
-                    <img style="width: 200px; margin-left: -10px;" src="{{ asset('template/assets/images/logo/schoolifee.png') }}" alt="">
                     <form action="{{ route('loginProses') }}" class="mt-3" method="POST">
                     @csrf
                         <div class="form-group position-relative has-icon-left mb-4">
@@ -37,12 +36,13 @@
                         <button class="btn btn-primary btn-block btn-md shadow-lg">
                             Log in
                         </button>
+                        <p class="mt-2">Pengguna baru? daftarkan akun, <a class="font-bold" href="{{ route('reg') }}">disini.</a></p>
                     </form>
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
                 <div id="auth-right">
-                    {{-- <img src="{{ asset('template/assets/images/logo/xavier.png') }}" style="width: 100%; height: 740px;" alt=""> --}}
+                    {{-- <img style="width: 200px; margin-left: -10px;" src="{{ asset('template/assets/images/logo/schoolifee.png') }}" alt=""> --}}
                 </div>
             </div>
         </div>

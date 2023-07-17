@@ -31,10 +31,6 @@
                                 </a>
                             </div>
                             <div>
-                                {{-- <button type="button" class="btn btn-outline-primary block" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModalCenter">
-                                    Launch Modal
-                                </button> --}}
                                 <button type="button" data-bs-toggle="modal"
                                     data-bs-target="#exampleModalCenter{{ $item->id }}"
                                     class="btn btn-danger btn-sm text-white"><i class="fas fa-trash"></i></button>

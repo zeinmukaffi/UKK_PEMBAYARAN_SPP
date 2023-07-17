@@ -32,7 +32,6 @@ class PembayaranController extends Controller
     public function create($id)
     {
         $bayarId = Siswa::findorfail($id);
-        // dd($bayarId);
         return view('pembayaran.entry', compact('bayarId'));
     }
 
@@ -58,6 +57,12 @@ class PembayaranController extends Controller
         foreach ($tagihan as $val) {
             $sisa = $val->tagihan;
             $byr->sisa_tagihan = $sisa - str_replace(',', '', $request->jumlah_bayar);
+            
+            if ($byr->sisa_tagihan === $sisa) {
+                $byr->status = "LUNAS";
+            }else{
+                $byr->status = "BELUM LUNAS";
+            }
         }
         
         $byr->petugas_id = $request->petugas_id;
@@ -66,8 +71,8 @@ class PembayaranController extends Controller
         $byr->tgl_bayar = $request->tgl_bayar;
         $byr->jumlah_bayar = str_replace(',', '', $request->jumlah_bayar);
         $byr->save();
-
-        return redirect('/pembayaran');
+        return redirect('pembayaran');
+        
     }
 
     /**
@@ -91,7 +96,7 @@ class PembayaranController extends Controller
         $bayarId = Pembayaran::findorfail($id);
         $data = DB::select('CALL history(?)', array($bayarId->siswa_id));
         $pdf = PDF::loadView('pembayaran.invoice', compact('bayarId','data'))->setOptions(['defaultFont' => 'sans-serif'])->setPaper('a4', 'landscape');
-        return $pdf->download('Invoices'.$bayarId->bulan_dibayar.'.pdf');
+        return $pdf->download('INV'.$bayarId->sppSiswa->nisn.$bayarId->bulan_dibayar.'.pdf');
         // return $pdf->stream();
     }
 
@@ -124,8 +129,10 @@ class PembayaranController extends Controller
      * @param  \App\Models\Pembayaran  $pembayaran
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pembayaran $pembayaran)
+    public function destroy($id)
     {
-        //
+        $pembayaran = Pembayaran::findorfail($id);
+        $pembayaran->delete();
+        return redirect('/pembayaran');
     }
 }

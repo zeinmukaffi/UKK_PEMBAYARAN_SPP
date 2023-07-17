@@ -78,23 +78,14 @@
                             </a>
                         </li>
 
-                        @if (Auth::user()->level == 'Siswa')
-                        <li class="sidebar-item {{ 'history' == request()->path() ? 'active' : '' }}">
+                        {{-- @if (Auth::user()->level == 'Siswa') --}}
+                        {{-- <li class="sidebar-item {{ 'history' == request()->path() ? 'active' : '' }}">
                             <a href="{{ url('history') }}" class='sidebar-link'>
                                 <i class="fas fa-money-bill-wave-alt"></i>
                                 <span>History Pembayaran SPP</span>
                             </a>
-                        </li>
-                        @endif
-
-                        @if (Auth::user()->level == 'Petugas')
-                        <li class="sidebar-item {{ 'pembayaran' == request()->path() ? 'active' : '' }}">
-                            <a href="{{ route('pembayaran') }}" class='sidebar-link'>
-                                <i class="bi bi-cash-stack"></i>
-                                <span>Pembayaran SPP</span>
-                            </a>
-                        </li>
-                        @endif
+                        </li> --}}
+                        {{-- @endif --}}
 
                         @if (auth()->user()->level == 'Admin')
                         <li class="sidebar-item {{ 'pembayaran' == request()->path() ? 'active' : '' }}">
@@ -188,7 +179,7 @@
         //     } );
         // } );
     </script>
-    
+
 </body>
 
 </html>

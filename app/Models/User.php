@@ -20,16 +20,16 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $fillable = [
         'username',
-        'nama',
+        // 'nama',
         'level',
         'password',
     ];
-    
+
     public function siswa()
     {
         return $this->belongsTo(Siswa::class, 'siswa_id');
     }
-    
+
     public function pembayaran()
     {
         return $this->hasMany(Pembayaran::class);

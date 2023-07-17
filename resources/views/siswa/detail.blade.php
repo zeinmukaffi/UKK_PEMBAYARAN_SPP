@@ -44,13 +44,13 @@
                 <div class="col-md-1 vl"></div>
                 <div class="col-md-5 row mt-3">
                     <div class="col-md-4">
-                        <label>NIS</label>
+                        <label>Tanggal Lahir</label>
                     </div>
                     <div class="col-md-2">
                         <label>:</label>
                     </div>
                     <div class="col-md-6 form-group">
-                        <p>{{ $siswaId->nis }}</p>
+                        <p>{{ $siswaId->tgl_lahir }}</p>
                     </div>
                 </div>
             </div>
@@ -88,19 +88,19 @@
                         <label>:</label>
                     </div>
                     <div class="col-md-6 form-group">
-                        <p>{{ $siswaId->spp->tahun }}</p>
+                        <p>{{ $siswaId->spp->tahun_masuk }}</p>
                     </div>
                 </div>
                 <div class="col-md-1 vl"></div>
                 <div class="col-md-5 row mt-3">
                     <div class="col-md-4">
-                        <label>Total Tagihan SPP</label>
+                        <label>Tagihan SPP</label>
                     </div>
                     <div class="col-md-2">
                         <label>:</label>
                     </div>
                     <div class="col-md-6 form-group">
-                        <p>Rp. {{ number_format($siswaId->tagihan) }}</p>
+                        <p>Rp. {{ number_format($siswaId->spp->nominal) }}</p>
                     </div>
                 </div>
             </div>

@@ -6,16 +6,8 @@
             <div class="col-6 col-lg-3 col-md-6">
                 <div class="card">
                     <div class="card-body px-4 py-4-5">
-                        <h5 class="font-semibold">Manage Administrator</h5>
+                        <h5 class="font-semibold">Manage Admin</h5>
                         <a class="btn btn-info" href="{{ url('regIndexAdmin') }}">Manage</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-4 py-4-5">
-                        <h5 class="font-semibold">Manage Petugas</h5>
-                        <a class="btn btn-info" href="{{ url('regIndexPet') }}">Manage</a>
                     </div>
                 </div>
             </div>

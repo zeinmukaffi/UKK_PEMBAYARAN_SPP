@@ -6,6 +6,7 @@ use App\Models\SPP;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Pembayaran;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -46,38 +47,35 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'nama' => 'required',
-            'nisn' => 'required',
-            'nis' => 'required',
-            // 'pin' => 'required',
-            'kelas_id' => 'required',
-            'spp_id' => 'required',
-            // 'tagihan' => 'required',
-            'alamat' => 'required',
-            'notelp' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'nama' => 'required',
+        //     'nisn' => 'required',
+        //     'nis' => 'required',
+        //     'kelas_id' => 'required',
+        //     'spp_id' => 'required',
+        //     'alamat' => 'required',
+        //     'notelp' => 'required',
+        // ]);
 
         $siswa = new Siswa();
-        $tagihan = SPP::select('spp.nominal')
-        ->where('spp.id', '=', $request->spp_id)
-        ->get();
-
-        foreach ($tagihan as $key) 
-        {
-            $val = $key->nominal;
-            $siswa->tagihan = $val;
-        }
-        
         $siswa->nama = $request->nama;
         $siswa->nisn = $request->nisn;
-        // $siswa->pin = $request->pin;
-        $siswa->nis = $request->nis;
+        $siswa->tgl_lahir = $request->tgl_lahir;
         $siswa->kelas_id = $request->kelas_id;
         $siswa->spp_id = $request->spp_id;
         $siswa->alamat = $request->alamat;
         $siswa->notelp = $request->notelp;
         $siswa->save();
+        $pw = explode('-', $request->tgl_lahir);
+        $pass = $pw[2].$pw[1].$pw[0];
+        // dd($ppw);
+        $akunSiswa = new User();
+        $akunSiswa->name = $request->nama;
+        $akunSiswa->username = $request->nisn;
+        $akunSiswa->password = bcrypt($pass);
+        $akunSiswa->level = 'Siswa';
+        // dd($siswa);
+        $akunSiswa->save();
 
         return redirect('siswa');
     }
@@ -95,7 +93,7 @@ class SiswaController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {   
+    {
         $spp = SPP::all();
         $kelas = Kelas::all();
         $siswaId = Siswa::findorfail($id);
@@ -123,8 +121,8 @@ class SiswaController extends Controller
         $tagihan = SPP::select('spp.nominal')
         ->where('spp.id', '=', $request->spp_id)
         ->get();
-        
-        foreach ($tagihan as $key) 
+
+        foreach ($tagihan as $key)
         {
             $val = $key->nominal;
             $siswaId->tagihan = $val;
@@ -158,7 +156,7 @@ class SiswaController extends Controller
         // ->join('siswas', 'pembayarans.siswa_id', '=', 'siswas.id')
         // ->where('pembayarans.siswa_id', '=', Auth::user()->siswa_id)
         // ->get();
-        
+
         $data = DB::select('CALL history(?)', array(Auth::user()->siswa_id));
         // dd($data);
         return view('tampilanSiswa.index', compact('data'));

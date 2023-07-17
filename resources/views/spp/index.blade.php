@@ -13,8 +13,7 @@
                     <tr>
                         <th>No</th>
                         <th>Tahun Masuk</th>
-                        <th>Nominal Per Bulan</th>
-                        <th>Nominal Total</th>
+                        <th>Nominal</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -22,9 +21,8 @@
                     @foreach ($dataSPP as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->tahun }}</td>
-                        <td>{{ number_format($item->per_bulan) }}</td>
-                        <td>{{ number_format($item->nominal) }}</td>
+                        <td>{{ $item->tahun_masuk }}</td>
+                        <td>Rp. {{ number_format($item->nominal) }}</td>
                         <td class="d-flex gap-2" style="justify-content: center">
                             <div>
                                 <a href="{{ url('spp/'.$item->id.'/edit') }}"

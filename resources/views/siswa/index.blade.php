@@ -16,7 +16,7 @@
                         <th>NISN</th>
                         <th>Kelas</th>
                         <th>Tahun Masuk</th>
-                        <th>Total Tagihan SPP</th>
+                        <th>Tagihan SPP</th>
                         <th>Alamat</th>
                         <th>Action</th>
                     </tr>
@@ -28,8 +28,8 @@
                         <td>{{ $item->nama }}</td>
                         <td>{{ $item->nisn }}</td>
                         <td>{{ $item->kelas->nama_kelas }}</td>
-                        <td>{{ $item->spp->tahun }}</td>
-                        <td>Rp. {{ number_format($item->tagihan) }}</td>
+                        <td>{{ $item->spp->tahun_masuk }}</td>
+                        <td>Rp. {{ number_format($item->spp->nominal) }}</td>
                         <td>{{ $item->alamat }}</td>
                         <td class="d-flex gap-2">
                             <div>

@@ -14,6 +14,7 @@
                         </div>
                         <input type="number" style="display: none;" name="siswa_id" value="{{ $bayarId->id }}">
                         <input type="number" style="display: none;" name="petugas_id" value="{{ Auth::user()->id }}">
+                        <input type="text" style="display: none;" name="status">
                         <div class="col-md-8 form-group">
                             <input type="text" class="form-control"
                                 disabled value="{{ $bayarId->nama }}" />
@@ -78,22 +79,24 @@
                         <div class="col-md-8 form-group">
                             <select class="form-select" name="bulan_dibayar" id="basicSelect">
                                 <option>Pilih Bulan Bayar</option>
-                                <option value="JAN">Januari</option>
-                                <option value="FEB">Februari</option>
-                                <option value="MAR">Maret</option>
-                                <option value="APR">April</option>
+                                <option value="JANUARI">Januari</option>
+                                <option value="FEBRUARI">Februari</option>
+                                <option value="MARET">Maret</option>
+                                <option value="APRIL">April</option>
                                 <option value="MEI">Mei</option>
-                                <option value="JUN">Juni</option>
-                                <option value="JUL">Juli</option>
-                                <option value="AGS">Agustus</option>
-                                <option value="SEP">September</option>
-                                <option value="OKT">Oktober</option>
-                                <option value="NOV">November</option>
-                                <option value="DES">Desember</option>
+                                <option value="JUNI">Juni</option>
+                                <option value="JULI">Juli</option>
+                                <option value="AGUSTUS">Agustus</option>
+                                <option value="SEPTEMBER">September</option>
+                                <option value="OKTOBER">Oktober</option>
+                                <option value="NOVEMBER">November</option>
+                                <option value="DESEMBER">Desember</option>
                             </select>
-                            @error('bulan_dibayar')
-                                <p class="text-danger">{{ $message }}</p>
-                            @enderror
+                            @if ($pesan = Session::get('message'))
+                            <p class="alert alert-danger mt-1" role="alert">
+                                {{ $pesan }}
+                            </p>
+                            @endif
                         </div>
                         <div class="col-sm-12 d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary me-1 mb-1">

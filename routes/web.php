@@ -23,11 +23,12 @@ use App\Http\Controllers\UserManagementController;
 
 Route::get('/', [LoginController::class, 'index'])->name('loginform');
 Route::post('/loginProses', [LoginController::class, 'loginProses'])->name('loginProses');
+Route::get('/reg', [LoginController::class, 'reg'])->name('reg');
+Route::post('/regisProses', [LoginController::class, 'regisProses'])->name('regisProses');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 // Route::view('invoices', 'pembayaran.invoice');
 
 // Route::group(['middleware' => 'prev'], function(){
-    // Route::middleware(['auth', 'prev'])->group(function() {
     // route to dashboard
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::group(['middleware' => ['auth', 'cekLevel:Admin']], function(){
@@ -38,7 +39,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
         // route siswa
         Route::resource('siswa', SiswaController::class);
         // route user management
-        Route::get('/userManagement', [UserManagementController::class, 'index'])->name('userManagement'); 
+        Route::get('/userManagement', [UserManagementController::class, 'index'])->name('userManagement');
             // admin
             Route::get('/regIndexAdmin', [UserManagementController::class, 'regIndexAdmin'])->name('regIndexAdmin');
             Route::get('/regAdmin', [UserManagementController::class, 'regAdmin'])->name('regAdmin');
@@ -64,13 +65,13 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
             Route::get('/sppPDF', [SPPController::class, 'pdf'])->name('sppPDF');
             Route::get('/kelasPDF', [KelasController::class, 'pdf'])->name('kelasPDF');
             Route::get('/siswaPDF', [SiswaController::class, 'pdf'])->name('siswaPDF');
-            // Route::get('/invoicePDF/{id}', [PembayaranController::class, 'pdf'])->name('invoicePDF');
-            Route::get('/invoice/{id}', [PembayaranController::class, 'show'])->name('invoice');
-    });
+        });
 
     Route::middleware(['cekPay'])->group(function() {
+        Route::get('/invoice/{id}', [PembayaranController::class, 'show'])->name('invoice');
         Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
         Route::get('/bayaran/{id}', [PembayaranController::class, 'create'])->name('bayaran');
+        Route::delete('/byrDel/{id}', [PembayaranController::class, 'destroy'])->name('byrDel');
         Route::post('/pay', [PembayaranController::class, 'pay'])->name('pay');
     });
 

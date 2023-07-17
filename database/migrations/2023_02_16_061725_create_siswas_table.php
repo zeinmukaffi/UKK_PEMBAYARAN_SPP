@@ -14,15 +14,14 @@ return new class extends Migration
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
             $table->string('nisn', '8');
-            $table->string('nis', '8');
             $table->string('nama');
+            $table->date('tgl_lahir');
             $table->unsignedBigInteger('kelas_id');
             $table->foreign('kelas_id')->references('id')->on('kelas')->onDelete('cascade');
             $table->unsignedBigInteger('spp_id');
             $table->foreign('spp_id')->references('id')->on('spp')->onDelete('cascade');
             $table->text('alamat');
             $table->string('notelp');
-            $table->string('tagihan');
             $table->timestamps();
         });
     }
